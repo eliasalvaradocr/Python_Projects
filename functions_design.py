@@ -1,94 +1,136 @@
 import tkinter as tk
+import math
 
-# Definition of colors and font styles
+# Definición de colores y estilos
 BLACK = "#000000"
 WHITE = "#FFFFFF"
 SMALL_FONT_STYLE = ("Arial", 16)
 LARGE_FONT_STYLE = ("Arial", 40, "bold")
 ORANGE = "#FFA07A"
 GRAY = "#A9A9A9"
-DIMGEY = "#696969"
+DIMGRAY = "#696969"
 
-# Initializes the main window
-window = tk.Tk()
-window.geometry("375x667")  # Sets the size of the window
-window.title('Calculator')  # Sets the title of the window
-window.configure(bg=BLACK)  # Sets the background color
+# Variables globales para manejar expresiones
+total_expression = ""  # Expresión acumulada
+current_expression = ""  # Expresión actual
 
-# Creates the frame for the calculator screen
-frame = tk.Frame(window, height=221, bg=BLACK)  # Sets the black background for the screen
-frame.pack(expand=True, fill='both')  # Allows the frame to expand and fill the available space
+# Función para actualizar las etiquetas de pantalla
+def actualizacion_pantalla(total_label, current_label):
+    total_label.config(text=total_expression)
+    current_label.config(text=current_expression)
 
-# Initializes the expressions to display
-total_expression = "0"  # Initial total expression
-current_expression = "0"  # Initial current expression
+# Función para manejar la pulsación de botones
+def on_button_click(button, total_label, current_label):
+    global total_expression, current_expression
 
-# Creates the label to display the total expression
-total_label = tk.Label(
-    frame,
-    text=total_expression,  # Initial text of the total label
-    anchor=tk.E,  # Anchors the text to the right
-    bg=BLACK,  # Black background
-    fg=WHITE,  # White text
-    padx=24,  # Horizontal padding
-    font=SMALL_FONT_STYLE  # Small font style
-)
-total_label.pack(expand=True, fill='both')  # Allows the total label to expand
+    if button.isdigit() or button == ".":
+        # Añadir números o punto a la expresión actual
+        current_expression += button
+    elif button in ["+", "-", "\u00F7", "\u00D7"]:
+        # Añadir operador a la expresión total
+        if current_expression:
+            total_expression += current_expression + button
+            current_expression = ""
+    elif button == "=":
+        # Calcular el resultado
+        total_expression += current_expression
+        try:
+            current_expression = str(eval(total_expression.replace("\u00F7", "/").replace("\u00D7", "*")))
+        except Exception:
+            current_expression = "Error"
+        total_expression = ""
+    elif button == "C":
+        # Limpiar la pantalla
+        total_expression = ""
+        current_expression = ""
+    elif button == chr(9003):  # Retroceso
+        current_expression = current_expression[:-1]
+    elif button == "√":
+        # Calcular la raíz cuadrada
+        try:
+            current_expression = str(math.sqrt(float(current_expression)))
+        except ValueError:
+            current_expression = "Error"
+    actualizacion_pantalla(total_label, current_label)
 
-# Creates the label to display the current expression
-label = tk.Label(
-    frame,
-    text=current_expression,  # Initial text of the current label
-    anchor=tk.E,  # Anchors the text to the right
-    bg=BLACK,  # Black background
-    fg=WHITE,  # White text
-    padx=24,  # Horizontal padding
-    font=LARGE_FONT_STYLE  # Large font style
-)
-label.pack(expand=True, fill='both')  # Allows the current label to expand
+# Función para crear la ventana principal
+def create_window():
+    global total_expression, current_expression
 
-# Creates the frame for the buttons
-button_frame = tk.Frame(window, bg=BLACK)  # Frame to hold the buttons
-button_frame.pack(expand=True, fill='both')  # Allows the button frame to expand
+    # Configuración de la ventana principal
+    window = tk.Tk()
+    window.geometry("375x667")
+    window.title("Calculadora")
+    window.configure(bg=BLACK)
 
-# Button configuration
-buttons = [
-    chr(9003), "C", "√", "\u00F7",  
-    "7", "8", "9", "\u00D7",
-    "4", "5", "6", "-",
-    "1", "2", "3", "+",
-    ".", "0", "New", "="  
-]
+    # Crear el marco de la pantalla
+    frame = tk.Frame(window, height=221, bg=BLACK)
+    frame.pack(expand=True, fill="both")
 
-# Create the buttons in a grid
-row, col = 0, 0
-for button in buttons:
-    # Assign background color based on the button
-    if button in ['C', "√", chr(9003)]:  # If the button is C, √, or the back button
-        button_color = GRAY
-    elif button in ['\u00F7', '\u00D7', '-', '+', '=']:  # If it is an operator
-        button_color = ORANGE
-    else:  # For numbers and other buttons
-        button_color = DIMGEY
-    b = tk.Button(
-        button_frame,
-        text=button,
-        bg=button_color,  # Assigns the button color
-        fg=WHITE,  # White text
-        font=SMALL_FONT_STYLE,
-        borderwidth=0,
+    # Etiqueta para la expresión total
+    total_label = tk.Label(
+        frame,
+        text=total_expression,
+        anchor=tk.E,
+        bg=BLACK,
+        fg=WHITE,
+        padx=24,
+        font=SMALL_FONT_STYLE
     )
-    b.grid(row=row, column=col, sticky=tk.NSEW, padx=5, pady=5)  # Places the button in the grid
-    col += 1  # Moves to the next column
-    if col > 3:  # If the end of the row is reached
-        col = 0  # Resets the column
-        row += 1  # Moves to the next row
+    total_label.pack(expand=True, fill="both")
 
-# Configures the weight of the rows and columns so that the buttons expand properly
-for i in range(4):
-    button_frame.columnconfigure(i, weight=1)  # Allows the columns to expand
-for i in range(5):
-    button_frame.rowconfigure(i, weight=1)  # Allows the rows to expand
+    # Etiqueta para la expresión actual
+    current_label = tk.Label(
+        frame,
+        text=current_expression,
+        anchor=tk.E,
+        bg=BLACK,
+        fg=WHITE,
+        padx=24,
+        font=LARGE_FONT_STYLE
+    )
+    current_label.pack(expand=True, fill="both")
 
-# Starts the main loop of the window
-window.mainloop()
+    # Crear el marco de botones
+    button_frame = tk.Frame(window, bg=BLACK)
+    button_frame.pack(expand=True, fill="both")
+
+    # Botones de la calculadora
+    buttons = [
+        chr(9003), "C", "√", "\u00F7",  
+        "7", "8", "9", "\u00D7",
+        "4", "5", "6", "-",
+        "1", "2", "3", "+",
+        ".", "0", "New", "="
+    ]
+
+    # Colocar botones en la cuadrícula
+    row, col = 0, 0
+    for button in buttons:
+        button_color = (
+            GRAY if button in ['C', "√", chr(9003)] else
+            ORANGE if button in ['\u00F7', '\u00D7', '-', '+', '='] else
+            DIMGRAY
+        )
+        b = tk.Button(
+            button_frame,
+            text=button,
+            bg=button_color,
+            fg=WHITE,
+            font=SMALL_FONT_STYLE,
+            borderwidth=0,
+            command=lambda x=button: on_button_click(x, total_label, current_label)
+        )
+        b.grid(row=row, column=col, sticky=tk.NSEW, padx=5, pady=5)
+        col += 1
+        if col > 3:
+            col = 0
+            row += 1
+
+    # Configurar el peso de las filas y columnas
+    for i in range(4):
+        button_frame.columnconfigure(i, weight=1)
+    for i in range(5):
+        button_frame.rowconfigure(i, weight=1)
+
+    return window
