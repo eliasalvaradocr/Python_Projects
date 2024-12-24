@@ -1,4 +1,4 @@
-# Graphical Calculator with Python
+# Python Projects Hub: Expanding Skills and Knowledge
 
 **Author**: Elias Alvarado
 
@@ -7,56 +7,8 @@
 **License**: Apache License 2.0
 
 ## Overview
-This project implements a **Graphical Calculator** using Python's **Tkinter** library. The calculator provides a clean and responsive user interface for performing various mathematical operations, including basic arithmetic, square roots, and more. Help documentation for developing this project can be found [Tkinter Documentation](https://docs.python.org/3/library/tk.html). This library provides a robust and independent set of windowing tools, the main virtues of Tkinter are that it is fast.
+Welcome to **Python Projects Hub**, a repository designed to explore and master different Python libraries and tools. Here you will find diverse projects covering data analysis, visualization, automation, machine learning, and more. Each project is designed to expand knowledge, hone programming skills, and solve real-world problems.
 
-## Features
-- **Graphical Interface**: Designed with `Tkinter` for a modern look and smooth user experience.  
-- **Mathematical Operations**:  
-  - Addition
-  - Subtraction
-  - Multiplication
-  - Division.  
-  - Square root calculation.  
-  - Clear and delete functionalities.  
-- **Error Handling**: Displays "Error" for invalid operations.  
-- **Customizable Design**: Colors and styles can be easily modified for personalization.  
-
-## Technologies Used  
-
-- **Programming Language**: Python  
-- **Libraries**:  
-  - `Tkinter` (for GUI design)  
-  - `Math` (for advanced mathematical operations)
- 
-
-## How to Use It
-
-1. **Clone the Repository**:  
-   ```bash  
-   git clone https://github.com/yourusername/graphical-calculator.git  
-   cd graphical-calculator
-2. **Ensure you have installed Python. Then, run**:
-    ```bash  
-   python calculator.py
-3. Interact with the Calculator:
-   Use the buttons on the interface to perform calculations.
-
-## Code Design
-**Modular Structure**
-
-- functions_design.py Handles all GUI design and logic.
-- calculator.py Serves as the entry point to run the application.
-
-## Future Enhancements
-
--  Add support for advanced mathematical operations (e.g. trigonometric functions).
--  Include history panel to view past calculations.
-
-## Screenshots
-
-**Calculator Interface**
-
-![image](https://github.com/user-attachments/assets/0e7c6e5c-d42a-43dd-9899-0b01cb72570a)
 
 ## Contributing
 
